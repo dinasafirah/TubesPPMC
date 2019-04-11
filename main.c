@@ -1,10 +1,3 @@
-//
-//  main.c
-//  tubesFix
-//
-//  Created by dina safirah on 09/04/19.
-//  Copyright © 2019 dina safirah. All rights reserved.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -796,7 +789,8 @@ void assignAsisten(asisten_t arrAsisten[12][5][4], praktikum_t arrJadwal[12][5][
         while ( intHari > 5)
         {
             printf("Input salah, silakan masukkan ulang\n");
-            printf("Hari: "); scanf("%d", &intHari);
+            printf("Hari: "); scanf("%s", hari);
+            intHari = konversiHari(hari);
         }
         
         //baca input ruang
@@ -807,7 +801,9 @@ void assignAsisten(asisten_t arrAsisten[12][5][4], praktikum_t arrJadwal[12][5][
         while (intRuang > 4)
         {
             printf("Input salah, silakan masukkan ulang\n");
-            printf("Ruang: "); scanf("%d", &intRuang);
+            printf("Ruang: ");
+            scanf("%s", ruang);
+            intRuang = konversiRuang(ruang);
         }
         
         value = validasiAsisten(asisten, minggu, intHari, intRuang, arrJadwal);
@@ -925,7 +921,6 @@ int ruleCheck(FILE fRule, praktikum_t arrJadwal[12][5][4], asisten_t arrAsisten[
     return 0;
 }
 //rozin
-//Procedure utama
 void scheduleManual(praktikum_t arrJadwal[12][5][4]){
     char matkul[6], hari[10],ruangan[5];
     char rombongan;
@@ -947,20 +942,22 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
     printf("[Mode Schedule]\n");
     printf("isi 'q' atau 'Q' untuk kembali ke menu\n");
     printf("Pilih Kode Praktikum (EL2205, EL2208, EB2200): ");
-    scanf("%s",matkul);
+    scanf("%s",&matkul);
     //Cek awal masukan mata kuliah
-    while ((matkul!= 'q') ||(matkul!= 'Q'))
+    do
     {
         //jika mata kuliah EB2200
         if(strcmp (matkul, str3) == 0)
         {
             printf("Rombongan (A atau B): ");
             scanf("%c", &rombongan);
+            scanf("%c", &rombongan);
             //Validasi input rombongan
-            while ((rombongan!='A') || (rombongan!='B'))
+            while ((rombongan!='A') && (rombongan!='B'))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Rombongan (A atau B): ");
+                scanf("%c", &rombongan);
                 scanf("%c", &rombongan);
             }
             
@@ -975,20 +972,20 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
             }
             
             printf("Hari: ");
-            scanf("%s",hari);
+            scanf("%s",&hari);
             //Validasi input hari
-            while ((strcmp (hari, str9) != 0)||(strcmp (hari, str11) != 0))
+            while ((strcmp (hari, str9) != 0)&& (strcmp (hari, str11) != 0))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Hari: ");
-                scanf("%s",hari);
+                scanf("%s",&hari);
             }
             hariNEW=konversiHari(hari);
             
             printf("Ruangan: ");
-            scanf("%s",ruangan);
+            scanf("%s",&ruangan);
             //Validasi input ruangan
-            while ((strcmp (ruangan, str4) != 0)||(strcmp (ruangan, str5) != 0)||(strcmp (ruangan, str6) != 0))
+            while ((strcmp (ruangan, str4) != 0)&&(strcmp (ruangan, str5) != 0)&&(strcmp (ruangan, str6) != 0))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Ruangan: ");
@@ -997,7 +994,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
             ruanganNEW = konversiRuang(ruangan);
             
             //Input ke array sesuai ruangan
-            if (strcmp(ruangan, str4) == 0)
+            if (ruanganNEW == 1)
             {
                 strcpy(arrJadwal[minggu][hariNEW][1].matkul,"EB2200");
                 if (rombongan =='A')
@@ -1009,7 +1006,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][1].rombongan='B';
                 }
             }
-            else if (strcmp(ruangan, str5) == 0)
+            else if (ruanganNEW == 2)
             {
                 strcpy(arrJadwal[minggu][hariNEW][2].matkul,"EB2200");
                 if (rombongan=='A')
@@ -1021,9 +1018,9 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][2].rombongan='B';
                 }
             }
-            else if (strcmp(ruangan, str6) == 0)
+            else if (ruanganNEW == 3)
             {
-                strcpy(LAB3[minggu][hariNEW].matkul,"EB2200");
+                strcpy(arrJadwal[minggu][hariNEW][3].matkul,"EB2200");
                 if (rombongan=='A')
                 {
                     arrJadwal[minggu][hariNEW][3].rombongan='A';
@@ -1033,19 +1030,19 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][3].rombongan= 'B';
                 }
             }
-            
-            
         }
         //jika mata kuliah EL2208
         else if (strcmp (matkul, str2) == 0)
         {
             printf("Rombongan (A1,A2,A3,B1,B2,B3 atau C): ");
             scanf("%c%d", &rombongan, &nomor);
+            scanf("%c%d", &rombongan, &nomor);
             //Validasi input rombongan
-            while ((rombongan!='A') ||  (rombongan!='B')||(rombongan!='C'))
+            while ((rombongan!='A') &&  (rombongan!='B')&&(rombongan!='C'))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Rombongan (A1,A2,A3,B1,B2,B3 atau C): ");
+                scanf("%c%d", &rombongan, &nomor);
                 scanf("%c%d", &rombongan, &nomor);
             }
             
@@ -1061,7 +1058,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
             
             if (rombongan =='C'){
                 printf("Hari: ");
-                scanf("%s",hari);
+                scanf("%s",&hari);
                 //Validasi input hari
                 while ((strcmp(hari, str10) != 0))
                 {
@@ -1072,32 +1069,32 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                 hariNEW=konversiHari(hari);
                 
                 printf("Ruangan: ");
-                scanf("%s",ruangan);
+                scanf("%s",&ruangan);
                 //Validasi input ruangan
-                while ((strcmp (ruangan, str4) != 0)||(strcmp (ruangan, str5) != 0)||(strcmp (ruangan, str6) != 0)||(strcmp (ruangan, str7) != 0))
+                while ((strcmp (ruangan, str4) != 0)&&(strcmp (ruangan, str5) != 0)&&(strcmp (ruangan, str6) != 0)&&(strcmp (ruangan, str7) != 0))
                 {
                     printf("Input salah, silahkan masukkan lagi :\n");
                     printf("Ruangan: ");
-                    scanf("%s",ruangan);
+                    scanf("%s",&ruangan);
                 }
-                
+                ruanganNEW=konversiRuang(ruangan);
                 //Input ke array sesuai ruangan
-                if (strcmp(ruangan, str4) == 0)
+                if (ruanganNEW == 1)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][1].matkul,"EL2208");
                     arrJadwal[minggu][hariNEW][1].rombongan= 'C';
                 }
-                else if (strcmp(ruangan, str5) == 0)
+                else if (ruanganNEW == 2)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][2].matkul,"EL2208");
                     arrJadwal[minggu][hariNEW][2].rombongan= 'C';
                 }
-                else if (strcmp(ruangan, str6) == 0)
+                else if (ruanganNEW == 3)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][3].matkul,"EL2208");
                     arrJadwal[minggu][hariNEW][3].rombongan = 'C';
                 }
-                else if (strcmp(ruangan, str7) == 0)
+                else if (ruanganNEW == 4)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][4].matkul,"EL2208");
                     arrJadwal[minggu][hariNEW][4].rombongan = 'C';
@@ -1107,19 +1104,20 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
             else
             {
                 printf("Hari: ");
-                scanf("%s",hari);
+                scanf("%s",&hari);
                 hariNEW=konversiHari(hari);
                 printf("Ruangan: ");
-                scanf("%s",ruangan);
+                scanf("%s",&ruangan);
+                ruanganNEW=konversiRuang(ruangan);
                 //Validasi input ruangan
-                while ((strcmp (ruangan, str4) != 0)||(strcmp (ruangan, str5) != 0)||(strcmp (ruangan, str6) != 0)||(strcmp (ruangan, str7) != 0))
+                while ((strcmp (ruangan, str4) != 0)&&(strcmp (ruangan, str5) != 0)&&(strcmp (ruangan, str6) != 0)&&(strcmp (ruangan, str7) != 0))
                 {
                     printf("Input salah, silahkan masukkan lagi :\n");
                     printf("Ruangan: ");
-                    scanf("%s",ruangan);
+                    scanf("%s",&ruangan);
                 }
                 //input ke array sesuai ruangan
-                if (strcmp(ruangan, str4) == 0)
+                if (ruanganNEW == 1)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][1].matkul,"EL2208");
                     if (rombongan == 'A' && nomor == 1)
@@ -1153,7 +1151,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                         arrJadwal[minggu][hariNEW][1].nomor = 3;
                     }
                 }
-                else if (strcmp(ruangan, str5) == 0)
+                else if (ruanganNEW == 2)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][2].matkul,"EL2208");
                     if (rombongan == 'A' && nomor == 1)
@@ -1187,7 +1185,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                         arrJadwal[minggu][hariNEW][2].nomor = 3;
                     }
                 }
-                else if (strcmp(ruangan, str6) == 0)
+                else if (ruanganNEW == 3)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][3].matkul,"EL2208");
                     if (rombongan == 'A' && nomor == 1)
@@ -1221,7 +1219,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                         arrJadwal[minggu][hariNEW][3].nomor = 3;
                     }
                 }
-                else if (strcmp(ruangan, str7) == 0)
+                else if (ruanganNEW == 4)
                 {
                     strcpy(arrJadwal[minggu][hariNEW][4].matkul,"EL2208");
                     if (rombongan == 'A' && nomor == 1)
@@ -1259,11 +1257,13 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
         {
             printf("Rombongan (A1,A2,B1,B2,C1 atau C2): ");
             scanf("%c%d",&rombongan, &nomor);
+            scanf("%c%d",&rombongan, &nomor);
             //Validasi rombongan
-            while ((rombongan!='A') || (rombongan!='B')||(rombongan!='C'))
+            while ((rombongan!='A') && (rombongan!='B')&&(rombongan!='C'))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Rombongan (A1,A2,B1,B2,C1 atau C2): ");
+                scanf("%c%d",&rombongan, &nomor);
                 scanf("%c%d",&rombongan, &nomor);
             }
             
@@ -1278,20 +1278,21 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
             }
             
             printf("Hari: ");
-            scanf("%s",hari);
+            scanf("%s",&hari);
             hariNEW=konversiHari(hari);
             
             printf("Ruangan: ");
-            scanf("%s",ruangan);
+            scanf("%s",&ruangan);
             //Validasi input ruangan
-            while ((strcmp (ruangan, str4) != 0)||(strcmp (ruangan, str5) != 0)||(strcmp (ruangan, str6) != 0)||(strcmp (ruangan, str7) != 0))
+            while ((strcmp (ruangan, str4) != 0)&&(strcmp (ruangan, str5) != 0)&&(strcmp (ruangan, str6) != 0)&&(strcmp (ruangan, str7) != 0))
             {
                 printf("Input salah, silahkan masukkan lagi :\n");
                 printf("Ruangan: ");
-                scanf("%s",ruangan);
+                scanf("%s",&ruangan);
             }
+            ruanganNEW=konversiRuang(ruangan);
             //Input ke array sesuai ruangan
-            if (strcmp(ruangan, str4) == 0)
+            if (ruanganNEW == 1)
             {
                 strcpy(arrJadwal[minggu][hariNEW][1].matkul,"EL2205");
                 if (rombongan == 'A' && nomor == 1)
@@ -1325,7 +1326,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][1].nomor = 3;
                 }
             }
-            else if (strcmp(ruangan, str5) == 0){
+            if (ruanganNEW == 2){
                 strcpy(arrJadwal[minggu][hariNEW][2].matkul,"EL2205");
                 if (rombongan == 'A' && nomor == 1)
                 {
@@ -1358,7 +1359,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][2].nomor = 3;
                 }
             }
-            else if (strcmp(ruangan, str6) == 0){
+            if (ruanganNEW == 3){
                 strcpy(arrJadwal[minggu][hariNEW][3].matkul,"EL2205");
                 if (rombongan == 'A' && nomor == 1)
                 {
@@ -1391,7 +1392,7 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                     arrJadwal[minggu][hariNEW][3].nomor = 3;
                 }
             }
-            else if (strcmp(ruangan, str7) == 0){
+            if (ruanganNEW == 4){
                 strcpy(arrJadwal[minggu][hariNEW][4].matkul,"EL2205");
                 if (rombongan == 'A' && nomor == 1)
                 {
@@ -1425,7 +1426,15 @@ void scheduleManual(praktikum_t arrJadwal[12][5][4]){
                 }
             }
         }
-    }
+        else if(strcmp(matkul,"q")==0 || strcmp(matkul,"Q")==0) {
+            return;
+        }
+        else {
+            printf("Pilih Kode Praktikum (EL2205, EL2208, EB2200): ");
+            scanf("%s",&matkul);
+        }
+    }while((strcmp(matkul,"q")!=0 || strcmp(matkul,"Q")!=0) || strcmp(matkul,"EB2200")==0 || strcmp(matkul,"EL2208")==0 || strcmp(matkul,"EL2205")==0);
+    
 }
 
 //mencetak schedule praktikum sementarta
@@ -1552,3 +1561,4 @@ void tampilSchedule(praktikum_t arrJadwal[12][5][4])
         printf("\n");
     }
 }
+
