@@ -1285,7 +1285,7 @@ void tampilSchedule(praktikum_t arrJadwal[12][5][4])
             {
                 if (arrJadwal[minggu][hari][ruang].matkul[1] != NULL)
                 {
-                    printf(" %8s - %c%d |", arrJadwal[minggu][hari][ruang].matkul, arrJadwal[minggu][hari][ruang].rombongan, arrJadwal[minggu][hari][ruang].nomor);
+                    printf(" %6s-%c%d    |", arrJadwal[minggu][hari][ruang].matkul, arrJadwal[minggu][hari][ruang].rombongan, arrJadwal[minggu][hari][ruang].nomor);
                 }
                 else
                 {
